@@ -23,15 +23,13 @@ topology:
       image: alpine:latest
       exec:
         - apk add --no-cache curl bash
-        - ip link set dev eth1 up        
+        - ip link set dev eth1 up
         - ip addr add 10.0.1.1/24 dev eth1
 
     # 3. Target Application: Custom PHP Web Server with iproute2 pre-installed
     phpserver:
       kind: linux
       image: custom-php:latest
-      ports:
-        - "3000:3000"
       exec:
         - ip link set dev eth1 up
         - ip addr add 10.0.1.2/24 dev eth1
@@ -43,13 +41,13 @@ topology:
       ports:
         - "80:8080"
       env:
-        BACKEND: "http://10.0.1.2:3000"
+        BACKEND: "http://10.0.1.2:80"
         MODSEC_RULE_ENGINE: "On"
       binds:
         # Mount custom rules into the ModSecurity additional rules directory
         - rules/custom_rules.conf:/etc/modsecurity.d/owasp-crs/rules/RESPONSE-999-CUSTOM.conf:ro
       exec:
-        - ip link set dev eth1 up      
+        - ip link set dev eth1 up
         - ip addr add 10.0.1.3/24 dev eth1
 
   # Inter-container Links through Switch (sw0)
