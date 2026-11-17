@@ -69,30 +69,11 @@ Two custom Docker images were created for this lab.
 
 The PHP server uses the official PHP 8.2.34 Apache image.
 
-```dockerfile
-FROM php:8.2.34-apache
-
-RUN apt-get update && apt-get install -y iproute2 \
-    && rm -rf /var/lib/apt/lists/*
-```
-
-The `iproute2` package provides network administration utilities required to configure the container's network interface.
-
 ### ModSecurity WAF
 
 The WAF uses the OWASP ModSecurity Core Rule Set image with NGINX.
 
-```dockerfile
-FROM owasp/modsecurity-crs:nginx
 
-USER root
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends iproute2 iputils-ping \
-    && rm -rf /var/lib/apt/lists/*
-```
-
-The additional packages provide network configuration and connectivity testing utilities.
 
 ### Building the Images
 
